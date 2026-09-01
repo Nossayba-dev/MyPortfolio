@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
-import { profile } from "../data/profile";
+import { profile, role, location } from "../data/profile";
+import { hero as copy } from "../data/copy";
 import { useLenis } from "../lib/SmoothScroll";
 import { useMediaQuery } from "../lib/useMediaQuery";
+import { useLanguage } from "../lib/LanguageContext";
 import { ArrowIcon } from "../components/ArrowIcon";
 import { Portrait } from "../components/Portrait";
 
@@ -14,6 +16,7 @@ import { Portrait } from "../components/Portrait";
  */
 export function Hero() {
   const lenis = useLenis();
+  const { pick } = useLanguage();
   // The portrait is dropped entirely when there isn't room beside the text —
   // narrow screens, and short ones like a phone in landscape. Skipping the render
   // (rather than hiding with CSS) also skips the download. Must stay in sync with
@@ -30,7 +33,7 @@ export function Hero() {
       <div className="container">
         <div className="hero-panel">
           <div className="hero-content">
-            <span className="hero-hello">Hello, I’m</span>
+            <span className="hero-hello">{pick(copy.hello)}</span>
 
             <h1 className="hero-name">
               <span>Nossayba</span>
@@ -39,32 +42,32 @@ export function Hero() {
 
             <div className="hero-meta">
               <p>
-                {profile.role} <span className="hero-sep">|</span> Based in {profile.location}
+                {pick(role)} <span className="hero-sep">|</span> {pick(copy.basedIn)} {pick(location)}
               </p>
             </div>
 
             <div className="hero-actions">
               <Link className="btn btn-primary" to="/contact">
-                Let’s talk
+                {pick(copy.talk)}
               </Link>
               <button className="btn btn-outline" onClick={() => scrollTo("projects")}>
-                My work
+                {pick(copy.myWork)}
               </button>
             </div>
           </div>
 
           {!stacked && (
             <div className="hero-figure">
-              <Portrait src="/nossayba.jpeg" alt={`${profile.name}, ${profile.role}`} />
+              <Portrait src="/nossayba.jpeg" alt={`${profile.name}, ${pick(role)}`} />
 
-              <Link className="hero-badge" to="/contact" aria-label="Go to the contact form">
+              <Link className="hero-badge" to="/contact" aria-label={pick(copy.badgeAriaLabel)}>
                 <svg viewBox="0 0 100 100" className="hero-badge-ring" aria-hidden="true">
                   <defs>
                     <path id="badge-circle" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
                   </defs>
                   <text>
                     <textPath href="#badge-circle" startOffset="0">
-                      CONTACT ME · CONTACT ME ·
+                      {pick(copy.badgeText)}
                     </textPath>
                   </text>
                 </svg>

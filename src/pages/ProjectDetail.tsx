@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getProject, projects } from "../data/projects";
+import { projectDetail as copy } from "../data/copy";
 import { Reveal } from "../components/Reveal";
 import { Contact } from "../sections/Contact";
+import { useLanguage } from "../lib/LanguageContext";
 
 export function ProjectDetail() {
   const { slug } = useParams();
   const project = getProject(slug ?? "");
+  const { pick } = useLanguage();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,15 +25,15 @@ export function ProjectDetail() {
       <header className="project-hero">
         <div className="container">
           <Link to="/" className="project-back">
-            ← Back to portfolio
+            {pick(copy.back)}
           </Link>
 
           <span className="project-hero-meta">
-            {project.year} · {project.role}
+            {project.year} · {pick(project.role)}
           </span>
 
-          <h1 className="project-hero-title">{project.name}</h1>
-          <p className="project-hero-tagline">{project.tagline}</p>
+          <h1 className="project-hero-title">{pick(project.name)}</h1>
+          <p className="project-hero-tagline">{pick(project.tagline)}</p>
 
           <ul className="project-hero-stack">
             {project.stack.map((s) => (
@@ -39,14 +42,16 @@ export function ProjectDetail() {
           </ul>
 
           {project.confidential ? (
-            <p className="project-notice">
-              This was client work. The application and its source stay private — the write-up below covers
-              the engineering, not the product.
-            </p>
+            <p className="project-notice">{pick(copy.confidentialNotice)}</p>
           ) : (
             project.repo && (
-              <a className="btn btn-primary project-hero-cta" href={project.repo} target="_blank" rel="noreferrer">
-                View source
+              <a
+                className="btn btn-primary project-hero-cta"
+                href={project.repo}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {pick(copy.viewSource)}
               </a>
             )
           )}
@@ -56,11 +61,11 @@ export function ProjectDetail() {
       <section className="section">
         <div className="container">
           <Reveal>
-            <p className="project-summary">{project.summary}</p>
+            <p className="project-summary">{pick(project.summary)}</p>
           </Reveal>
 
           <div className="project-overview">
-            {project.overview.map((paragraph, i) => (
+            {pick(project.overview).map((paragraph, i) => (
               <Reveal key={i} delay={i * 0.04}>
                 <p>{paragraph}</p>
               </Reveal>
@@ -73,10 +78,10 @@ export function ProjectDetail() {
         <div className="container">
           <div className="project-highlights">
             {project.highlights.map((h, i) => (
-              <Reveal key={h.title} delay={i * 0.04} className="project-highlight">
+              <Reveal key={pick(h.title)} delay={i * 0.04} className="project-highlight">
                 {/* h2 (not h3) so the page keeps a valid heading order without a section label */}
-                <h2>{h.title}</h2>
-                <p>{h.body}</p>
+                <h2>{pick(h.title)}</h2>
+                <p>{pick(h.body)}</p>
               </Reveal>
             ))}
           </div>
@@ -87,7 +92,7 @@ export function ProjectDetail() {
         <div className="container">
           <Reveal className="project-next">
             <Link to={`/projects/${next.slug}`} className="project-next-link">
-              {next.name}
+              {pick(next.name)}
             </Link>
           </Reveal>
         </div>

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { profile } from "../data/profile";
+import { contactPage as copy } from "../data/copy";
 import { Contact } from "../sections/Contact";
+import { useLanguage, type Bi } from "../lib/LanguageContext";
 
 type Field = "firstName" | "lastName" | "email" | "phone" | "message";
 type Values = Record<Field, string>;
@@ -19,27 +21,27 @@ const EMPTY: Values = {
 // valid addresses, and the real check is whether the mail actually arrives.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function validate(values: Values): Errors {
+function validate(values: Values, pick: (bi: Bi<string>) => string): Errors {
   const errors: Errors = {};
 
-  if (!values.firstName.trim()) errors.firstName = "Please enter your first name.";
-  if (!values.lastName.trim()) errors.lastName = "Please enter your last name.";
+  if (!values.firstName.trim()) errors.firstName = pick(copy.firstNameError);
+  if (!values.lastName.trim()) errors.lastName = pick(copy.lastNameError);
 
   if (!values.email.trim()) {
-    errors.email = "Please enter your email address.";
+    errors.email = pick(copy.emailEmptyError);
   } else if (!EMAIL.test(values.email.trim())) {
-    errors.email = "That doesn’t look like a valid email address.";
+    errors.email = pick(copy.emailInvalidError);
   }
 
   // Phone is optional, but if given it should look like a phone number.
   if (values.phone.trim() && !/^[\d\s+()-]{6,}$/.test(values.phone.trim())) {
-    errors.phone = "Please enter a valid phone number, or leave this empty.";
+    errors.phone = pick(copy.phoneError);
   }
 
   if (!values.message.trim()) {
-    errors.message = "Please write a message.";
+    errors.message = pick(copy.messageEmptyError);
   } else if (values.message.trim().length < 10) {
-    errors.message = "Please write a little more — at least 10 characters.";
+    errors.message = pick(copy.messageShortError);
   }
 
   return errors;
@@ -50,6 +52,7 @@ export function ContactPage() {
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const { pick } = useLanguage();
 
   const dirty = Object.values(values).some((v) => v.trim() !== "");
 
@@ -78,7 +81,7 @@ export function ContactPage() {
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const found = validate(values);
+    const found = validate(values, pick);
     setErrors(found);
 
     const firstInvalid = (Object.keys(found) as Field[])[0];
@@ -87,11 +90,11 @@ export function ContactPage() {
       return;
     }
 
-    const subject = `Portfolio enquiry from ${values.firstName} ${values.lastName}`;
+    const subject = `${pick(copy.mailSubject)} ${values.firstName} ${values.lastName}`;
     const body = [
-      `Name: ${values.firstName} ${values.lastName}`,
-      `Email: ${values.email}`,
-      values.phone.trim() ? `Phone: ${values.phone}` : null,
+      `${pick(copy.mailNameLabel)}: ${values.firstName} ${values.lastName}`,
+      `${pick(copy.mailEmailLabel)}: ${values.email}`,
+      values.phone.trim() ? `${pick(copy.mailPhoneLabel)}: ${values.phone}` : null,
       "",
       values.message,
     ]
@@ -109,14 +112,14 @@ export function ContactPage() {
       <header className="page-hero">
         <div className="container">
           <Link to="/" className="project-back">
-            ← Back
+            {pick(copy.back)}
           </Link>
           <h1 className="page-hero-title">
-            Let’s <span className="gradient-text">talk</span>
+            {pick(copy.titleBefore) ? `${pick(copy.titleBefore)} ` : ""}
+            <span className="gradient-text">{pick(copy.titleWord)}</span>
           </h1>
           <p className="page-hero-sub">
-            Tell me about your project or role and I’ll get back to you. You can also email me
-            directly at <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+            {pick(copy.subtitle)} <a href={`mailto:${profile.email}`}>{profile.email}</a>.
           </p>
         </div>
       </header>
@@ -125,11 +128,11 @@ export function ContactPage() {
         <div className="container form-wrap">
           {sent ? (
             <div className="form-sent" role="status" aria-live="polite">
-              <h2>Thanks, {values.firstName}.</h2>
+              <h2>
+                {pick(copy.sentThanks)} {values.firstName}.
+              </h2>
               <p>
-                Your email app should have opened with the message ready to send. If nothing
-                happened, email me directly at{" "}
-                <a href={`mailto:${profile.email}`}>{profile.email}</a>.
+                {pick(copy.sentBody)} <a href={`mailto:${profile.email}`}>{profile.email}</a>.
               </p>
               <button
                 type="button"
@@ -139,7 +142,7 @@ export function ContactPage() {
                   setSent(false);
                 }}
               >
-                Write another message
+                {pick(copy.writeAnother)}
               </button>
             </div>
           ) : (
@@ -147,28 +150,28 @@ export function ContactPage() {
               <div className="form-row">
                 <TextField
                   name="firstName"
-                  label="First name"
+                  label={pick(copy.firstNameLabel)}
                   autoComplete="given-name"
                   value={values.firstName}
                   error={errors.firstName}
                   onChange={update}
-                  placeholder="Nossayba…"
+                  placeholder={pick(copy.firstNamePlaceholder)}
                 />
                 <TextField
                   name="lastName"
-                  label="Last name"
+                  label={pick(copy.lastNameLabel)}
                   autoComplete="family-name"
                   value={values.lastName}
                   error={errors.lastName}
                   onChange={update}
-                  placeholder="Abbara…"
+                  placeholder={pick(copy.lastNamePlaceholder)}
                 />
               </div>
 
               <div className="form-row">
                 <TextField
                   name="email"
-                  label="Email"
+                  label={pick(copy.emailLabel)}
                   type="email"
                   inputMode="email"
                   autoComplete="email"
@@ -176,31 +179,31 @@ export function ContactPage() {
                   value={values.email}
                   error={errors.email}
                   onChange={update}
-                  placeholder="you@company.com…"
+                  placeholder={pick(copy.emailPlaceholder)}
                 />
                 <TextField
                   name="phone"
-                  label="Phone"
+                  label={pick(copy.phoneLabel)}
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
-                  optional
+                  optionalLabel={pick(copy.phoneOptional)}
                   spellCheck={false}
                   value={values.phone}
                   error={errors.phone}
                   onChange={update}
-                  placeholder="+212…"
+                  placeholder={pick(copy.phonePlaceholder)}
                 />
               </div>
 
               <div className="field">
-                <label htmlFor="message">Message</label>
+                <label htmlFor="message">{pick(copy.messageLabel)}</label>
                 <textarea
                   id="message"
                   name="message"
                   rows={6}
                   value={values.message}
-                  placeholder="Tell me what you’re working on…"
+                  placeholder={pick(copy.messagePlaceholder)}
                   aria-invalid={errors.message ? true : undefined}
                   aria-describedby={errors.message ? "message-error" : undefined}
                   onChange={(e) => update("message", e.target.value)}
@@ -213,7 +216,7 @@ export function ContactPage() {
               </div>
 
               <button type="submit" className="btn btn-primary form-submit">
-                Send message
+                {pick(copy.submit)}
               </button>
             </form>
           )}
@@ -232,7 +235,7 @@ function TextField({
   error,
   onChange,
   type = "text",
-  optional = false,
+  optionalLabel,
   ...rest
 }: {
   name: Field;
@@ -241,7 +244,7 @@ function TextField({
   error?: string;
   onChange: (field: Field, value: string) => void;
   type?: string;
-  optional?: boolean;
+  optionalLabel?: string;
   autoComplete?: string;
   inputMode?: "email" | "tel";
   spellCheck?: boolean;
@@ -251,7 +254,7 @@ function TextField({
     <div className="field">
       <label htmlFor={name}>
         {label}
-        {optional && <span className="field-optional">Optional</span>}
+        {optionalLabel && <span className="field-optional">{optionalLabel}</span>}
       </label>
       <input
         id={name}

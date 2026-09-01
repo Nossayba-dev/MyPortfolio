@@ -20,11 +20,30 @@
   /* warm violet → pink, from the .NET brand purple */
   --violet: #6a3df0;
   --violet-deep: #5527d4;
+  --violet-hover: #5527d4;
   --violet-soft: #a76bff;
   --orchid: #c86ae0;
   --pink: #f06ba8;
   --accent-wash: rgba(106, 61, 240, 0.08);
   --gradient: linear-gradient(100deg, var(--violet) 0%, var(--orchid) 55%, var(--pink) 100%);
+
+  /* the glassy nav background once scrolled */
+  --nav-glass: rgba(255, 255, 255, 0.88);
+
+  /* surfaces that stay high-contrast against whichever theme is active — the
+     contact band and the hero's rotating badge use these instead of --ink, so
+     they keep popping (dark-on-light / light-on-dark) in both themes */
+  --invert-bg: #100a18;
+  --invert-text: rgba(255, 255, 255, 0.72);
+  --invert-text-strong: #ffffff;
+  --invert-text-faint: rgba(255, 255, 255, 0.5);
+  --invert-border: rgba(255, 255, 255, 0.14);
+
+  --error: #d33b6a;
+  --error-text: #c22f5c;
+  --error-wash: rgba(211, 59, 106, 0.14);
+
+  --card-shadow: rgba(16, 10, 24, 0.28);
 
   --font-display: "Syne", sans-serif;
   --font-body: "DM Sans", system-ui, sans-serif;
@@ -35,6 +54,49 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0d0912;
+  --tint: #150f1f;
+  --tint-strong: #1d1529;
+  --card: #170f21;
+
+  --surface-pink: #180f17;
+  --surface-violet: #130e1e;
+  --surface-blue: #0e0f1e;
+  --border: #271e33;
+  --border-strong: #392c48;
+
+  --ink: #f4eefb;
+  --body: #b7aecb;
+  --muted: #857a97;
+
+  --violet: #7c4dff;
+  --violet-deep: #b9a3ff;
+  --violet-hover: #6a3df0;
+  --violet-soft: #a688ff;
+  --orchid: #d98eea;
+  --pink: #f38bbd;
+  --accent-wash: rgba(124, 77, 255, 0.18);
+
+  --nav-glass: rgba(13, 9, 18, 0.85);
+
+  /* flips relative to light mode: a light band on the now-dark page, so the
+     contact section and hero badge still pop instead of blending in */
+  --invert-bg: #f4eefc;
+  --invert-text: rgba(16, 10, 24, 0.72);
+  --invert-text-strong: #100a18;
+  --invert-text-faint: rgba(16, 10, 24, 0.5);
+  --invert-border: rgba(16, 10, 24, 0.14);
+
+  --error: #ff6f9c;
+  --error-text: #ff8fb4;
+  --error-wash: rgba(255, 111, 156, 0.16);
+
+  --card-shadow: rgba(124, 77, 255, 0.3);
 }
 
 * {
@@ -56,6 +118,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 
 #root {

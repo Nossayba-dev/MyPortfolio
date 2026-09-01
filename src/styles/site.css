@@ -52,7 +52,7 @@ section[id] {
 }
 
 .btn-primary:hover {
-  background: var(--violet-deep);
+  background: var(--violet-hover);
 }
 
 .btn-outline {
@@ -79,7 +79,7 @@ section[id] {
 
 .nav.is-scrolled {
   padding: 0.65rem 0;
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--nav-glass);
   backdrop-filter: blur(14px);
   border-bottom-color: var(--border);
 }
@@ -147,7 +147,28 @@ section[id] {
 .nav-end {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+
+.icon-btn:hover {
+  border-color: var(--violet-soft);
+  color: var(--violet-deep);
+  background: var(--accent-wash);
 }
 
 .nav-burger {
@@ -179,7 +200,7 @@ section[id] {
   flex-direction: column;
   gap: 1.1rem;
   padding: 1.4rem var(--edge) 1.9rem;
-  background: #fff;
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   font-size: 1.05rem;
   color: var(--ink);
@@ -219,6 +240,7 @@ section[id] {
   border-radius: var(--radius);
   padding: clamp(1.5rem, 6vw, 5rem);
   overflow: hidden;
+  transition: background-color 0.3s var(--ease);
 }
 
 .hero-content {
@@ -386,8 +408,11 @@ section[id] {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--ink);
-  color: #fff;
+  /* invert tokens (not --ink) so this stays a pop of contrast against the hero
+     panel in both themes: dark ring on light panel, light ring on dark panel */
+  background: var(--invert-bg);
+  color: var(--invert-text-strong);
+  transition: background-color 0.3s var(--ease);
 }
 
 .hero-badge-ring {
@@ -403,7 +428,7 @@ section[id] {
   font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.22em;
-  fill: #fff;
+  fill: var(--invert-text-strong);
   text-transform: uppercase;
 }
 
@@ -553,8 +578,8 @@ section[id] {
 }
 
 .tab.is-active {
-  background: var(--ink);
-  border-color: var(--ink);
+  background: var(--violet);
+  border-color: var(--violet);
   color: #fff;
 }
 
@@ -677,7 +702,7 @@ section[id] {
 .work-card:hover {
   transform: translateY(-4px);
   border-color: transparent;
-  box-shadow: 0 18px 40px -22px rgba(16, 10, 24, 0.28);
+  box-shadow: 0 18px 40px -22px var(--card-shadow);
 }
 
 .work-card-visual {
@@ -718,7 +743,7 @@ section[id] {
   z-index: 2;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--violet);
   color: #fff;
   font-size: 0.68rem;
   font-weight: 500;
@@ -772,13 +797,16 @@ section[id] {
 .contact {
   margin-top: clamp(2rem, 6vw, 4rem);
   padding: clamp(3.5rem, 8vw, 6rem) 0 2rem;
-  background: var(--ink);
-  color: rgba(255, 255, 255, 0.72);
+  /* invert tokens (not --ink) so this band stays a high-contrast finale against
+     the page in both themes: dark-on-light in light mode, light-on-dark in dark */
+  background: var(--invert-bg);
+  color: var(--invert-text);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 
 .contact h2,
 .contact .contact-block a {
-  color: #fff;
+  color: var(--invert-text-strong);
 }
 
 .contact-title {
@@ -799,7 +827,7 @@ section[id] {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   padding-bottom: 3rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid var(--invert-border);
 }
 
 .contact-label {
@@ -808,7 +836,7 @@ section[id] {
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--invert-text-faint);
 }
 
 .contact-block a {
@@ -841,7 +869,7 @@ section[id] {
 
 .back-to-top {
   display: inline-block;
-  color: #fff;
+  color: var(--invert-text-strong);
   transition: color 0.2s var(--ease);
 }
 
@@ -861,6 +889,7 @@ section[id] {
 .project-hero {
   padding: clamp(6.5rem, 5vw + 4.5rem, 7.5rem) 0 3rem;
   background: var(--tint);
+  transition: background-color 0.3s var(--ease);
 }
 
 .project-back {
@@ -924,7 +953,7 @@ section[id] {
   padding: 1rem 1.25rem;
   max-width: 44rem;
   border-left: 3px solid var(--violet);
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--card);
   border-radius: 0 12px 12px 0;
   font-size: 0.95rem;
 }
@@ -1011,6 +1040,7 @@ section[id] {
 .page-hero {
   padding: clamp(6.5rem, 5vw + 4.5rem, 7.5rem) 0 clamp(2rem, 5vw, 3.5rem);
   background: var(--tint);
+  transition: background-color 0.3s var(--ease);
 }
 
 .page-hero-title {
@@ -1081,6 +1111,11 @@ section[id] {
 
 .field input,
 .field textarea {
+  /* native form-control theming (appearance: auto) can hold onto its own
+     border regardless of author border-color, even with !important — reset it
+     so the invalid-state border below is actually reliable */
+  appearance: none;
+  -webkit-appearance: none;
   width: 100%;
   padding: 0.85rem 1rem;
   font: inherit;
@@ -1117,17 +1152,17 @@ section[id] {
 
 .field input[aria-invalid="true"],
 .field textarea[aria-invalid="true"] {
-  border-color: #d33b6a;
+  border-color: var(--error);
 }
 
 .field input[aria-invalid="true"]:focus,
 .field textarea[aria-invalid="true"]:focus {
-  box-shadow: 0 0 0 3px rgba(211, 59, 106, 0.14);
+  box-shadow: 0 0 0 3px var(--error-wash);
 }
 
 .field-error {
   font-size: 0.85rem;
-  color: #c22f5c;
+  color: var(--error-text);
 }
 
 .form-submit {
