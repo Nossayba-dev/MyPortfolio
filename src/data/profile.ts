@@ -119,6 +119,17 @@ export type TimelineEntry = {
 export const timeline: TimelineEntry[] = [
   {
     kind: "work",
+    title: role,
+    org: "Advanced Quantum Technology",
+    place: location,
+    period: "May 2026 — Present",
+    description: {
+      en: "Stayed on full-time after the internship, continuing as a .NET developer on the same team.",
+      fr: "Restée à temps plein après le stage, en tant que développeuse .NET au sein de la même équipe.",
+    },
+  },
+  {
+    kind: "work",
     title: { en: "Software Development Intern", fr: "Stagiaire développement logiciel" },
     org: "Advanced Quantum Technology",
     place: location,
