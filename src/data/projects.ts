@@ -10,6 +10,12 @@ export type Project = {
   stack: string[];
   repo?: string;
   confidential?: boolean;
+  /** Own brand accent instead of the site's default violet/pink, scoped via a class. */
+  accent?: "green" | "blue";
+  logo?: string;
+  /** Product screenshots — the first is cropped for the card; all of them show
+   * as a gallery on the detail page. */
+  screenshots?: string[];
   summary: Bi<string>;
   overview: Bi<string[]>;
   highlights: { title: Bi<string>; body: Bi<string> }[];
@@ -17,19 +23,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "industrial-weighing-app",
-    name: { en: "Industrial Weighing Application", fr: "Application de pesée industrielle" },
+    slug: "tolllga",
+    name: { en: "Tolllga", fr: "Tolllga" },
     tagline: {
-      en: "A cross-platform .NET MAUI app for an industrial site, built around live hardware input.",
-      fr: "Une application multiplateforme .NET MAUI pour un site industriel, conçue autour de données matérielles en temps réel.",
+      en: "A weighing-station management system for a cross-platform .NET MAUI client, built around live hardware input.",
+      fr: "Un système de gestion de pesées pour un client multiplateforme .NET MAUI, conçu autour de données matérielles en temps réel.",
     },
     year: "2026",
     role: { en: "Developer — internship project", fr: "Développeuse — projet de stage" },
     stack: [".NET MAUI", "Blazor Hybrid", "C#", "SQLite", "Serial / USB", "Windows", "Android"],
     confidential: true,
+    accent: "green",
+    logo: "/tolllga-logo.png",
     summary: {
-      en: "Client software built during my internship at Advanced Quantum Technology. The application itself is private, so what follows is about the engineering behind it rather than the product.",
-      fr: "Un logiciel client développé pendant mon stage chez Advanced Quantum Technology. L’application elle-même reste privée : ce qui suit porte donc sur l’ingénierie derrière le projet plutôt que sur le produit.",
+      en: "Tolllga is a weighing-station management system I built during my internship at Advanced Quantum Technology. The application and its source stay private, so what follows is about the engineering behind it rather than the product.",
+      fr: "Tolllga est un système de gestion de pesées que j’ai développé pendant mon stage chez Advanced Quantum Technology. L’application et son code source restent privés : ce qui suit porte donc sur l’ingénierie derrière le projet plutôt que sur le produit.",
     },
     overview: {
       en: [
@@ -75,85 +83,61 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "serial-device-reader",
-    name: { en: "Serial Device Reader", fr: "Lecteur de périphérique série" },
+    slug: "boutique",
+    name: { en: "Boutique", fr: "Boutique" },
     tagline: {
-      en: "A small C# utility for reading and parsing live data from equipment over a serial port.",
-      fr: "Un petit utilitaire C# pour lire et analyser des données en direct depuis un équipement via un port série.",
+      en: "A full-stack e-commerce demo — a React storefront and admin dashboard backed by a Spring Boot REST API.",
+      fr: "Une démo e-commerce full-stack — une vitrine et un tableau de bord admin en React, adossés à une API REST Spring Boot.",
     },
-    year: "2025",
+    year: "2026",
     role: { en: "Sole developer", fr: "Développeuse unique" },
-    stack: ["C#", "System.IO.Ports", "Serial Communication"],
-    repo: "https://github.com/Nossayba-dev/lecteurBalance",
+    stack: ["React", "Vite", "Java", "Spring Boot", "Spring Data JPA", "MySQL", "REST APIs"],
+    repo: "https://github.com/Nossayba-dev/boutique-react-sbringboot",
+    accent: "blue",
+    screenshots: ["/boutique-screenshot.jpg", "/admin-screen.jpg"],
     summary: {
-      en: "A focused utility that answers one question properly: can I open a serial connection to a physical device and turn its raw output into a value I trust?",
-      fr: "Un utilitaire ciblé qui répond correctement à une seule question : puis-je ouvrir une connexion série vers un appareil physique et transformer sa sortie brute en une valeur fiable ?",
+      en: "A personal full-stack project built to practice pairing a React front end with a Spring Boot back end: a storefront where customers browse and buy, and an admin dashboard to manage what they see.",
+      fr: "Un projet personnel full-stack pour m’entraîner à associer un front-end React à un back-end Spring Boot : une vitrine où les clients naviguent et achètent, et un tableau de bord admin pour gérer ce qu’ils voient.",
     },
     overview: {
       en: [
-        "Industrial equipment is rarely tidy about what it sends — padding, sign characters, inconsistent decimal separators, partial lines. Rather than discover all of that inside a larger application, I built the reader on its own first.",
-        "Solving it in isolation meant that by the time this logic was needed in a real project, the edge cases were already known and handled.",
+        "I built this to practice the full split between a front end and a back end talking only over HTTP — a React storefront and admin dashboard on one side, a Spring Boot REST API on the other, each one runnable and deployable independently.",
+        "The backend uses Spring Data JPA over MySQL for users, products, categories and the cart, with the schema recreated and reseeded with demo data on every restart — useful for a project meant to be cloned and tried, not a production database with real customers in it.",
+        "The API is documented with springdoc-openapi, so anyone running it locally gets a working Swagger UI to explore the endpoints without reading the source first. CORS is configured to accept any localhost origin, so the frontend connects cleanly regardless of which port Vite happens to pick.",
       ],
       fr: [
-        "Les équipements industriels sont rarement soignés dans ce qu’ils envoient : espaces de remplissage, caractères de signe, séparateurs décimaux incohérents, lignes incomplètes. Plutôt que de découvrir tout cela au sein d’une application plus large, j’ai d’abord construit le lecteur seul.",
-        "En le résolvant isolément, les cas limites étaient déjà identifiés et gérés le jour où cette logique a été nécessaire dans un vrai projet.",
+        "J’ai construit ce projet pour m’entraîner à séparer complètement un front-end et un back-end qui ne communiquent que par HTTP — une vitrine et un tableau de bord admin en React d’un côté, une API REST Spring Boot de l’autre, chacun pouvant être lancé et déployé indépendamment.",
+        "Le back-end utilise Spring Data JPA sur MySQL pour les utilisateurs, les produits, les catégories et le panier, avec un schéma recréé et réalimenté en données de démonstration à chaque redémarrage — pratique pour un projet destiné à être cloné et testé, pas une base de production avec de vrais clients.",
+        "L’API est documentée avec springdoc-openapi, donc quiconque la lance en local obtient une interface Swagger fonctionnelle pour explorer les endpoints sans avoir à lire le code source. Le CORS est configuré pour accepter n’importe quelle origine localhost, afin que le frontend se connecte proprement quel que soit le port choisi par Vite.",
       ],
     },
     highlights: [
       {
-        title: { en: "Event-driven serial port handling", fr: "Gestion du port série pilotée par événements" },
+        title: { en: "Decoupled front end and back end", fr: "Front-end et back-end découplés" },
         body: {
-          en: "Opens and manages a COM-port connection using System.IO.Ports, reacting to incoming data events instead of polling on a timer.",
-          fr: "Ouvre et gère une connexion sur port COM avec System.IO.Ports, en réagissant aux événements de réception de données plutôt qu’en sondant à intervalles réguliers.",
+          en: "A React storefront and admin dashboard talk to a separate Spring Boot REST API over HTTP — the two sides can be developed, run and deployed independently.",
+          fr: "Une vitrine et un tableau de bord admin en React communiquent avec une API REST Spring Boot séparée via HTTP — les deux côtés peuvent être développés, lancés et déployés indépendamment.",
         },
       },
       {
-        title: { en: "Defensive parsing", fr: "Analyse défensive" },
+        title: { en: "Catalog, search and per-user cart", fr: "Catalogue, recherche et panier par utilisateur" },
         body: {
-          en: "Normalizes raw device strings — stripping padding and sign characters, handling regional decimal formats — into reliable numeric values.",
-          fr: "Normalise les chaînes brutes de l’appareil — suppression des espaces de remplissage et des caractères de signe, gestion des formats décimaux régionaux — pour obtenir des valeurs numériques fiables.",
-        },
-      },
-    ],
-  },
-  {
-    slug: "print-module",
-    name: { en: "Print Module", fr: "Module d’impression" },
-    tagline: {
-      en: "A standalone printing component for generating and printing receipts from a C# application.",
-      fr: "Un composant d’impression autonome pour générer et imprimer des reçus depuis une application C#.",
-    },
-    year: "2025",
-    role: { en: "Sole developer", fr: "Développeuse unique" },
-    stack: ["C#", "HTML", "CSS"],
-    repo: "https://github.com/Nossayba-dev/builtInPrintSystem",
-    summary: {
-      en: "A printing component built to close the loop on a records workflow: once something is recorded, someone usually needs it on paper.",
-      fr: "Un composant d’impression conçu pour boucler un flux d’enregistrement : une fois qu’une donnée est enregistrée, quelqu’un a généralement besoin de l’avoir sur papier.",
-    },
-    overview: {
-      en: [
-        "The idea was to keep the document layout in HTML and CSS, and the printing behaviour in C#. Restyling a receipt then means editing a template, not recompiling an application.",
-        "Built as a separate module so the print pipeline could be tested on its own before being used anywhere real.",
-      ],
-      fr: [
-        "L’idée était de garder la mise en page du document en HTML et CSS, et le comportement d’impression en C#. Modifier le style d’un reçu revient alors à éditer un gabarit, pas à recompiler une application.",
-        "Conçu comme un module séparé afin que le circuit d’impression puisse être testé isolément avant d’être utilisé dans un contexte réel.",
-      ],
-    },
-    highlights: [
-      {
-        title: { en: "Template-driven layout", fr: "Mise en page pilotée par gabarit" },
-        body: {
-          en: "Receipt design lives in HTML/CSS, keeping presentation changes independent from the print logic.",
-          fr: "La conception du reçu vit en HTML/CSS, ce qui garde les changements de présentation indépendants de la logique d’impression.",
+          en: "Customers browse products by category, search, and add or remove items from a cart with a running total — all backed by JPA entities over MySQL.",
+          fr: "Les clients parcourent les produits par catégorie, effectuent des recherches et ajoutent ou retirent des articles d’un panier avec un total mis à jour en temps réel — le tout appuyé sur des entités JPA au-dessus de MySQL.",
         },
       },
       {
-        title: { en: "Isolated and testable", fr: "Isolé et testable" },
+        title: { en: "Admin dashboard", fr: "Tableau de bord admin" },
         body: {
-          en: "Developed standalone rather than embedded, so the printing flow could be iterated on without touching a larger codebase.",
-          fr: "Développé de façon autonome plutôt qu’intégré, pour pouvoir itérer sur le flux d’impression sans toucher à une base de code plus large.",
+          en: "A separate /admin route for managing products, categories and users, built on the exact same REST API the storefront uses.",
+          fr: "Une route /admin distincte pour gérer les produits, les catégories et les utilisateurs, construite sur la même API REST que celle utilisée par la vitrine.",
+        },
+      },
+      {
+        title: { en: "Documented, seedable API", fr: "API documentée et pré-remplie" },
+        body: {
+          en: "springdoc-openapi generates a working Swagger UI for every endpoint, and the database reseeds itself with demo data on every restart — clone it and there's something to click on immediately.",
+          fr: "springdoc-openapi génère une interface Swagger fonctionnelle pour chaque endpoint, et la base de données se réalimente en données de démonstration à chaque redémarrage — il suffit de cloner le projet pour avoir immédiatement quelque chose à tester.",
         },
       },
     ],

@@ -61,6 +61,7 @@ export const projectDetail = {
     fr: "Il s’agissait d’un projet client. L’application et son code source restent privés — le texte ci-dessous porte sur l’ingénierie, pas sur le produit.",
   },
   viewSource: { en: "View source", fr: "Voir le code source" },
+  viewLarger: { en: "View larger", fr: "Agrandir" },
 } satisfies Record<string, Bi<string>>;
 
 export const contactPage = {

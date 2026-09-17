@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { projects } from "../data/projects";
 import { portfolio as copy } from "../data/copy";
 import { Reveal } from "../components/Reveal";
+import { ProjectImage } from "../components/ProjectImage";
 import { useLanguage } from "../lib/LanguageContext";
 
 export function Projects() {
@@ -17,9 +18,28 @@ export function Projects() {
         <ul className="work-grid">
           {projects.map((project, i) => (
             <Reveal key={project.slug} delay={i * 0.05} as="li">
-              <Link to={`/projects/${project.slug}`} className="work-card">
+              <Link
+                to={`/projects/${project.slug}`}
+                className={`work-card ${project.accent ? `accent-${project.accent}` : ""}`}
+              >
                 <div className="work-card-visual" aria-hidden="true">
-                  <span className="work-card-initial">{pick(project.name).charAt(0)}</span>
+                  {project.screenshots?.[0] ? (
+                    <ProjectImage
+                      src={project.screenshots[0]}
+                      alt=""
+                      className="work-card-screenshot"
+                      fallback={<Initial name={pick(project.name)} />}
+                    />
+                  ) : project.logo ? (
+                    <ProjectImage
+                      src={project.logo}
+                      alt=""
+                      className="work-card-logo"
+                      fallback={<Initial name={pick(project.name)} />}
+                    />
+                  ) : (
+                    <Initial name={pick(project.name)} />
+                  )}
                   {project.confidential && <span className="chip-private">{pick(copy.private)}</span>}
                 </div>
                 <div className="work-card-body">
@@ -35,4 +55,8 @@ export function Projects() {
       </div>
     </section>
   );
+}
+
+function Initial({ name }: { name: string }) {
+  return <span className="work-card-initial">{name.charAt(0)}</span>;
 }

@@ -20,12 +20,12 @@ export const bio: Bi<string[]> = {
   en: [
     "I’m a .NET developer in Casablanca, with a bachelor’s degree in Computer Development and a full-stack bootcamp behind me.",
     "Most of my work is in C# — .NET MAUI, Blazor and SQL — and right now I’m building with ASP.NET Core. I like the unglamorous parts: talking to hardware over a serial port, keeping data correct offline, and making sure an app still behaves when something it depends on disappears.",
-    "On the web side I build with TypeScript, React, Next.js and Tailwind. I’ve also worked with Java and Spring Boot, and with PHP.",
+    "On the web side I build with TypeScript, React and Tailwind. I’ve also worked with Java and Spring Boot.",
   ],
   fr: [
     "Je suis développeuse .NET à Casablanca, avec une licence en développement informatique et un bootcamp full-stack derrière moi.",
     "L’essentiel de mon travail se fait en C# — .NET MAUI, Blazor et SQL — et je travaille en ce moment avec ASP.NET Core. J’aime les aspects moins visibles : communiquer avec du matériel via un port série, garder des données cohérentes hors ligne, et faire en sorte qu’une application continue de fonctionner correctement même quand un élément dont elle dépend disparaît.",
-    "Côté web, je développe avec TypeScript, React, Next.js et Tailwind. J’ai aussi travaillé avec Java et Spring Boot, ainsi qu’avec PHP.",
+    "Côté web, je développe avec TypeScript, React et Tailwind. J’ai aussi travaillé avec Java et Spring Boot.",
   ],
 };
 
@@ -56,8 +56,8 @@ export const services: Service[] = [
     kind: { en: "Web", fr: "Web" },
     title: { en: "Front-end development", fr: "Développement front-end" },
     body: {
-      en: "Responsive interfaces with React, Next.js and Tailwind CSS — built to be readable and maintained.",
-      fr: "Interfaces responsives avec React, Next.js et Tailwind CSS — pensées pour rester lisibles et faciles à maintenir.",
+      en: "Responsive interfaces with React and Tailwind CSS — built to be readable and maintained.",
+      fr: "Interfaces responsives avec React et Tailwind CSS — pensées pour rester lisibles et faciles à maintenir.",
     },
   },
   {
@@ -72,16 +72,8 @@ export const services: Service[] = [
     kind: { en: "Back-end", fr: "Back-end" },
     title: { en: "APIs & services", fr: "API et services" },
     body: {
-      en: "REST APIs and server-side logic with ASP.NET Core, plus Java with Spring Boot, PHP and Node.js.",
-      fr: "API REST et logique serveur avec ASP.NET Core, ainsi que Java avec Spring Boot, PHP et Node.js.",
-    },
-  },
-  {
-    kind: { en: "Systems", fr: "Systèmes" },
-    title: { en: "Hardware integration", fr: "Intégration matérielle" },
-    body: {
-      en: "Reading live data from physical equipment over serial and USB, and parsing it safely.",
-      fr: "Lecture de données en temps réel depuis des équipements physiques via port série et USB, avec une analyse fiable.",
+      en: "REST APIs and server-side logic with ASP.NET Core, plus Java with Spring Boot and Node.js.",
+      fr: "API REST et logique serveur avec ASP.NET Core, ainsi que Java avec Spring Boot et Node.js.",
     },
   },
 ];
@@ -99,11 +91,11 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     label: { en: "Web", fr: "Web" },
-    items: ["TypeScript", "JavaScript", "React", "Next.js", "Tailwind CSS", "HTML", "CSS", "Bootstrap"],
+    items: ["TypeScript", "JavaScript", "React", "Tailwind CSS", "HTML", "CSS", "Bootstrap"],
   },
   {
     label: { en: "Back-end", fr: "Back-end" },
-    items: ["Java", "Spring Boot", "PHP", "Node.js", "REST APIs"],
+    items: ["Java", "Spring Boot", "Node.js", "REST APIs"],
   },
   {
     label: { en: "Databases", fr: "Bases de données" },

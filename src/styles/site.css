@@ -23,6 +23,70 @@ section[id] {
   scroll-margin-top: 96px;
 }
 
+/* Tolllga's own brand green, scoped to just its card and detail page. Every
+   rule elsewhere keeps using var(--violet)/var(--pink)/var(--tint) etc., so
+   redefining those tokens here is enough to turn the whole card or page
+   green without duplicating each individual rule. Dark mode gets its own
+   pass since the site-wide dark values would otherwise win by inheritance. */
+.accent-green {
+  --violet: #16a34a;
+  --violet-deep: #0f7a37;
+  --violet-hover: #0e6e31;
+  --violet-soft: #4ade80;
+  --orchid: #22c55e;
+  --pink: #65a30d;
+  --accent-wash: rgba(22, 163, 74, 0.12);
+  --card-shadow: rgba(22, 101, 52, 0.28);
+  --tint: #eef8f1;
+  --tint-strong: #e1f3e6;
+  /* --gradient is declared once at :root, using :root's own --violet/--orchid/
+     --pink at resolution time — a descendant redefining those three alone
+     doesn't make an already-inherited --gradient recompute. Redeclaring the
+     same formula here forces it to resolve against the tokens above instead. */
+  --gradient: linear-gradient(100deg, var(--violet) 0%, var(--orchid) 55%, var(--pink) 100%);
+}
+
+:root[data-theme="dark"] .accent-green {
+  --violet: #22c55e;
+  --violet-deep: #86efac;
+  --violet-hover: #16a34a;
+  --violet-soft: #4ade80;
+  --orchid: #4ade80;
+  --pink: #bef264;
+  --accent-wash: rgba(34, 197, 94, 0.18);
+  --card-shadow: rgba(34, 197, 94, 0.3);
+  --tint: #0f1a12;
+  --tint-strong: #16241a;
+}
+
+/* Boutique's blue accent — same scoping technique as .accent-green above. */
+.accent-blue {
+  --violet: #2563eb;
+  --violet-deep: #1d4ed8;
+  --violet-hover: #1e40af;
+  --violet-soft: #60a5fa;
+  --orchid: #3b82f6;
+  --pink: #0ea5e9;
+  --accent-wash: rgba(37, 99, 235, 0.12);
+  --card-shadow: rgba(29, 78, 216, 0.28);
+  --tint: #eef4fd;
+  --tint-strong: #e0ecfb;
+  --gradient: linear-gradient(100deg, var(--violet) 0%, var(--orchid) 55%, var(--pink) 100%);
+}
+
+:root[data-theme="dark"] .accent-blue {
+  --violet: #3b82f6;
+  --violet-deep: #93c5fd;
+  --violet-hover: #2563eb;
+  --violet-soft: #60a5fa;
+  --orchid: #60a5fa;
+  --pink: #67e8f9;
+  --accent-wash: rgba(59, 130, 246, 0.18);
+  --card-shadow: rgba(59, 130, 246, 0.3);
+  --tint: #0e1a2e;
+  --tint-strong: #142640;
+}
+
 .section-title {
   font-size: clamp(2rem, 4.6vw, 3.25rem);
   max-width: 18ch;
@@ -372,9 +436,16 @@ section[id] {
   min-width: 0;
 }
 
+/* Neutral passthrough on desktop — the mobile media query below turns this
+   into the circular framed ring around the avatar. */
+.hero-avatar-ring {
+  display: block;
+  width: 100%;
+}
+
 .portrait {
   width: 100%;
-  height: 400px;
+  height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   object-position: center 22%;
@@ -454,25 +525,60 @@ section[id] {
 }
 
 /* Stack when there's no room beside the text — narrow screens, or short ones like
-   a phone in landscape. The portrait isn't rendered at all here (see Hero.tsx), so
-   the hero stays compact. Keep this query in sync with the one in Hero.tsx. */
+   a phone in landscape. The rectangular desktop photo becomes a small circular
+   avatar, centered above the greeting. */
 @media (max-width: 799px), (max-height: 520px) {
   .hero-panel {
     grid-template-columns: 1fr;
     align-items: start;
   }
 
-  /* tighter vertical rhythm without the portrait to balance against */
   .hero {
     padding: 5.25rem 0 2rem;
   }
 
+  .hero-content {
+    text-align: center;
+  }
+
   .hero-meta {
     margin-top: 1.1rem;
+    justify-content: center;
   }
 
   .hero-actions {
     margin-top: 1.5rem;
+    justify-content: center;
+  }
+
+  .hero-figure {
+    /* order: -1 puts the avatar first visually, while staying after the
+       greeting in reading/DOM order for screen readers */
+    order: -1;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-avatar-ring {
+    width: clamp(150px, 40vw, 190px);
+    height: clamp(150px, 40vw, 190px);
+    padding: 4px;
+    border-radius: 50%;
+    background: var(--gradient);
+  }
+
+  .portrait {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+  }
+
+  /* the badge's absolute offsets are tuned for the rectangular desktop photo;
+     "Let's talk" right below already covers the same call to action here */
+  .hero-badge {
+    display: none;
   }
 }
 
@@ -684,7 +790,11 @@ section[id] {
 .work-grid {
   margin-top: 2.75rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* auto-fit + a capped track: one project centers at a sensible width
+     instead of stretching edge to edge or leaving a lopsided empty column;
+     more projects wrap into the same grid automatically. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 560px));
+  justify-content: center;
   gap: 1.5rem;
 }
 
@@ -724,6 +834,14 @@ section[id] {
   background: radial-gradient(circle, rgba(240, 107, 168, 0.22), transparent 65%);
 }
 
+.accent-green .work-card-visual::after {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.2), transparent 65%);
+}
+
+.accent-blue .work-card-visual::after {
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.2), transparent 65%);
+}
+
 .work-card-initial {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 8vw, 5rem);
@@ -733,6 +851,24 @@ section[id] {
   background-clip: text;
   color: transparent;
   position: relative;
+  z-index: 1;
+}
+
+.work-card-logo {
+  width: 68%;
+  max-width: 240px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.work-card-screenshot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
   z-index: 1;
 }
 
@@ -784,12 +920,6 @@ section[id] {
 
 .work-card:hover .work-card-link {
   color: var(--pink);
-}
-
-@media (max-width: 780px) {
-  .work-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ---------- contact ---------- */
@@ -906,6 +1036,12 @@ section[id] {
   color: var(--violet-deep);
 }
 
+.project-hero-logo {
+  height: 40px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
 .project-hero-meta {
   display: block;
   font-size: 0.78rem;
@@ -946,6 +1082,68 @@ section[id] {
 
 .project-hero-cta {
   margin-top: 2rem;
+}
+
+.project-screenshot-wrap {
+  margin-top: clamp(-2.5rem, -4vw, -1.5rem);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.project-screenshot-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.project-screenshot-btn::after {
+  /* hover affordance that it's clickable, without covering the image with a
+     permanent tint */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(16, 10, 24, 0);
+  transition: background-color 0.2s var(--ease);
+  pointer-events: none;
+}
+
+.project-screenshot-btn:hover::after,
+.project-screenshot-btn:focus-visible::after {
+  background: rgba(16, 10, 24, 0.12);
+}
+
+/* Source screenshots come in whatever shape they were captured at (a full
+   storefront page vs a cropped dashboard) — a shared aspect-ratio + cover
+   keeps them reading as one consistent gallery instead of mismatched sizes. */
+.project-screenshot {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 48px -28px var(--card-shadow);
+  transition: transform 0.3s var(--ease);
+}
+
+.project-screenshot-btn:hover .project-screenshot {
+  transform: scale(1.015);
+}
+
+/* One screenshot reads better full-width than force-fit into a grid track. */
+.project-screenshot-wrap:has(.project-screenshot-btn:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.project-screenshot-wrap:has(.project-screenshot-btn:only-child) .project-screenshot {
+  aspect-ratio: 16 / 9;
 }
 
 .project-notice {
@@ -1198,6 +1396,45 @@ section[id] {
   .form-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* ---------- lightbox ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 6vw, 4rem);
+  background: rgba(8, 5, 12, 0.86);
+  cursor: zoom-out;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: clamp(1rem, 4vw, 2rem);
+  right: clamp(1rem, 4vw, 2rem);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: background-color 0.2s var(--ease);
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ---------- 404 ---------- */

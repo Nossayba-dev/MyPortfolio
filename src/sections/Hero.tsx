@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { profile, role, location } from "../data/profile";
 import { hero as copy } from "../data/copy";
 import { useLenis } from "../lib/SmoothScroll";
-import { useMediaQuery } from "../lib/useMediaQuery";
 import { useLanguage } from "../lib/LanguageContext";
 import { ArrowIcon } from "../components/ArrowIcon";
 import { Portrait } from "../components/Portrait";
@@ -17,11 +16,6 @@ import { Portrait } from "../components/Portrait";
 export function Hero() {
   const lenis = useLenis();
   const { pick } = useLanguage();
-  // The portrait is dropped entirely when there isn't room beside the text —
-  // narrow screens, and short ones like a phone in landscape. Skipping the render
-  // (rather than hiding with CSS) also skips the download. Must stay in sync with
-  // the matching media query in site.css.
-  const stacked = useMediaQuery("(max-width: 799px), (max-height: 520px)");
 
   function scrollTo(id: string) {
     const el = document.getElementById(id);
@@ -56,27 +50,29 @@ export function Hero() {
             </div>
           </div>
 
-          {!stacked && (
-            <div className="hero-figure">
+          <div className="hero-figure">
+            {/* on phone widths this ring becomes the circular framed avatar;
+                on desktop it's a transparent passthrough around the rectangular photo */}
+            <div className="hero-avatar-ring">
               <Portrait src="/nossayba.jpeg" alt={`${profile.name}, ${pick(role)}`} />
-
-              <Link className="hero-badge" to="/contact" aria-label={pick(copy.badgeAriaLabel)}>
-                <svg viewBox="0 0 100 100" className="hero-badge-ring" aria-hidden="true">
-                  <defs>
-                    <path id="badge-circle" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
-                  </defs>
-                  <text>
-                    <textPath href="#badge-circle" startOffset="0">
-                      {pick(copy.badgeText)}
-                    </textPath>
-                  </text>
-                </svg>
-                <span className="hero-badge-core">
-                  <ArrowIcon />
-                </span>
-              </Link>
             </div>
-          )}
+
+            <Link className="hero-badge" to="/contact" aria-label={pick(copy.badgeAriaLabel)}>
+              <svg viewBox="0 0 100 100" className="hero-badge-ring" aria-hidden="true">
+                <defs>
+                  <path id="badge-circle" d="M50,50 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
+                </defs>
+                <text>
+                  <textPath href="#badge-circle" startOffset="0">
+                    {pick(copy.badgeText)}
+                  </textPath>
+                </text>
+              </svg>
+              <span className="hero-badge-core">
+                <ArrowIcon />
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

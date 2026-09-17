@@ -1,32 +1,46 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getProject, projects } from "../data/projects";
 import { projectDetail as copy } from "../data/copy";
 import { Reveal } from "../components/Reveal";
 import { Contact } from "../sections/Contact";
+import { ProjectImage } from "../components/ProjectImage";
+import { Lightbox } from "../components/Lightbox";
 import { useLanguage } from "../lib/LanguageContext";
 
 export function ProjectDetail() {
   const { slug } = useParams();
   const project = getProject(slug ?? "");
   const { pick } = useLanguage();
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLightboxSrc(null);
   }, [slug]);
 
   if (!project) return <Navigate to="/" replace />;
 
   const index = projects.findIndex((p) => p.slug === project.slug);
-  const next = projects[(index + 1) % projects.length];
+  // null, not a self-link, when this is the only project
+  const next = projects.length > 1 ? projects[(index + 1) % projects.length] : null;
+  const accentClass = project.accent ? `accent-${project.accent}` : "";
 
   return (
-    <article>
+    <article className={accentClass}>
       <header className="project-hero">
         <div className="container">
           <Link to="/" className="project-back">
             {pick(copy.back)}
           </Link>
+
+          {project.logo && (
+            <ProjectImage
+              className="project-hero-logo"
+              src={project.logo}
+              alt={pick(project.name)}
+            />
+          )}
 
           <span className="project-hero-meta">
             {project.year} · {pick(project.role)}
@@ -58,6 +72,30 @@ export function ProjectDetail() {
         </div>
       </header>
 
+      {project.screenshots && project.screenshots.length > 0 && (
+        <div className="container">
+          <Reveal className="project-screenshot-wrap">
+            {project.screenshots.map((src, i) => (
+              <button
+                key={src}
+                type="button"
+                className="project-screenshot-btn"
+                aria-label={`${pick(copy.viewLarger)} — ${pick(project.name)} ${i + 1}`}
+                onClick={() => setLightboxSrc(src)}
+              >
+                <ProjectImage
+                  className="project-screenshot"
+                  src={src}
+                  alt={`${pick(project.name)} — ${i + 1}`}
+                />
+              </button>
+            ))}
+          </Reveal>
+        </div>
+      )}
+
+      <Lightbox src={lightboxSrc} alt={pick(project.name)} onClose={() => setLightboxSrc(null)} />
+
       <section className="section">
         <div className="container">
           <Reveal>
@@ -88,15 +126,17 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <Reveal className="project-next">
-            <Link to={`/projects/${next.slug}`} className="project-next-link">
-              {pick(next.name)}
-            </Link>
-          </Reveal>
-        </div>
-      </section>
+      {next && (
+        <section className="section">
+          <div className="container">
+            <Reveal className="project-next">
+              <Link to={`/projects/${next.slug}`} className="project-next-link">
+                {pick(next.name)}
+              </Link>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       <Contact />
     </article>
